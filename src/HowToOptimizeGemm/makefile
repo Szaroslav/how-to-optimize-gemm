@@ -1,12 +1,13 @@
-OLD  := MMult0
-NEW  := MMult0
+# OLD  := MMult0
+# NEW  := MMult0
+
 #
 # sample makefile
 #
 
-CC         := gcc
+CC         := gcc-13
 LINKER     := $(CC)
-CFLAGS     := -O2 -Wall -msse3
+CFLAGS     := -O2 -Wall -march=armv8.5-a
 LDFLAGS    := -lm
 
 UTIL       := copy_matrix.o \
@@ -16,22 +17,22 @@ UTIL       := copy_matrix.o \
               REF_MMult.o \
               print_matrix.o
 
-TEST_OBJS  := test_MMult.o $(NEW).o 
+TEST_OBJS  := test_MMult.o $(NEW).o
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-all: 
+all:
 	make clean;
 	make test_MMult.x
 
 test_MMult.x: $(TEST_OBJS) $(UTIL) parameters.h
 	$(LINKER) $(TEST_OBJS) $(UTIL) $(LDFLAGS) \
-        $(BLAS_LIB) -o $(TEST_BIN) $@ 
+        $(BLAS_LIB) -o $(TEST_BIN) $@
 
-run:	
+run:
 	make all
 	export OMP_NUM_THREADS=1
 	export GOTO_NUM_THREADS=1
